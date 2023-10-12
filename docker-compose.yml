@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_container1
+    environment:
+      MYSQL_DATABASE: classicmodels  
+      MYSQL_USER: root 
+      MYSQL_PASSWORD: 12345678
+    ports:
+      - "3306:3306"
+    networks:
+      - ola_network
+
+
+  springboot:
+    build: .
+    container_name: classic_business-model_app1
+    ports:
+      - "9090:9090"
+    depends_on:
+      - mysql
+    networks:
+      - ola_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://cbm-kartik-grp2-database.cttlsbowersq.ap-northeast-1.rds.amazonaws.com:3306/classicmodels
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 12345678
+
+networks:
+  ola_network:
+    driver: bridge
